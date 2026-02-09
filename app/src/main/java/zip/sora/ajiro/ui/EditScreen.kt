@@ -2,7 +2,6 @@ package zip.sora.ajiro.ui
 
 import android.content.ClipData
 import android.os.Environment
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -79,7 +78,6 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import kotlinx.coroutines.delay
 import zip.sora.ajiro.DOWNLOAD_SUBDIR_NAME
 import zip.sora.ajiro.R
-import zip.sora.ajiro.privileged.UserService
 import zip.sora.ajiro.utils.addHistory
 import zip.sora.ajiro.utils.copyFileToDownloadFolder
 import zip.sora.ajiro.utils.drawVerticalScrollbar

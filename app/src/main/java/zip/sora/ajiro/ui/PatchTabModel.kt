@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
 import zip.sora.ajiro.HARAPPA_DIR_NAME
 import zip.sora.ajiro.HARAPPA_ZIP_NAME
 import zip.sora.ajiro.privileged.UserService
@@ -86,7 +85,8 @@ class PatchTabModel : ScreenModel {
                 _uiState.update {
                     it.copy(
                         errorMessage = "下载失败: ${e.message}",
-                        status = PatchTabStatus.PENDING
+                        status = PatchTabStatus.PENDING,
+                        progress = 0.0f
                     )
                 }
                 return@launch
@@ -105,7 +105,8 @@ class PatchTabModel : ScreenModel {
                 _uiState.update {
                     it.copy(
                         errorMessage = "解压失败: ${e.message}",
-                        status = PatchTabStatus.PENDING
+                        status = PatchTabStatus.PENDING,
+                        progress = 0.0f
                     )
                 }
                 return@launch
@@ -115,6 +116,7 @@ class PatchTabModel : ScreenModel {
                 it.copy(
                     localSha = it.remoteSha,
                     status = PatchTabStatus.PENDING,
+                    progress = 1.0f,
                     progressDesc = { "完成！" })
             }
         }
@@ -139,13 +141,18 @@ class PatchTabModel : ScreenModel {
                         UserService.instance?.quickPatchSingle(file.path)
                     } else {
                         UserService.instance?.patchText(
-                            file.nameWithoutExtension,
+                            file.name,
                             File(fileDir, "$HARAPPA_DIR_NAME/gtx").path
                         )
                     }
                 }
             UserService.instance?.patchFinish()
-            _uiState.update { it.copy(status = PatchTabStatus.PENDING, progressDesc = { "完成！" }) }
+            _uiState.update {
+                it.copy(
+                    status = PatchTabStatus.PENDING,
+                    progress = 1.0f,
+                    progressDesc = { "完成！" })
+            }
         }
     }
 
